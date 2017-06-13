@@ -98,6 +98,12 @@ func (u *UDP) CanDecode() gopacket.LayerClass {
 // right next decoder. It tries first to decode via the
 // destination port, then the source port.
 func (u *UDP) NextLayerType() gopacket.LayerType {
+	nlt, err := GuessLayerType(u.Payload, "udp", uint16(u.SrcPort), uint16(u.DstPort))
+
+	if err == nil {
+		return nlt
+	}
+
 	if lt := u.DstPort.LayerType(); lt != gopacket.LayerTypePayload {
 		return lt
 	}

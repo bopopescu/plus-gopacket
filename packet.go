@@ -159,6 +159,10 @@ func (p *packet) AddLayer(l Layer) {
 	p.last = l
 }
 
+func (p *packet) LastLayer() Layer {
+	return p.last
+}
+
 func (p *packet) DumpPacketData() {
 	fmt.Fprint(os.Stderr, p.packetDump())
 	os.Stderr.Sync()

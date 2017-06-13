@@ -43,6 +43,8 @@ type PacketBuilder interface {
 	// AddLayer should be called by a decoder immediately upon successful
 	// decoding of a layer.
 	AddLayer(l Layer)
+	// Returns the most recent (outermost) layer
+	LastLayer() Layer
 	// The following functions set the various specific layers in the final
 	// packet.  Note that if many layers call SetX, the first call is kept and all
 	// other calls are ignored.
