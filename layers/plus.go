@@ -75,7 +75,7 @@ func (plus *PLUS) DecodeFromBytes(data []byte, df gopacket.DecodeFeedback) error
 		p.PCFValue = nil
 		p.Payload = data[20:]
 
-		p.BaseLayer = BaseLayer{Contents: data[:20]}
+		p.BaseLayer = BaseLayer{Contents: data[:20], Payload : p.Payload}
 
 		return nil
 	} else {
@@ -109,7 +109,7 @@ func (plus *PLUS) DecodeFromBytes(data []byte, df gopacket.DecodeFeedback) error
 
 		nindex += int(p.PCFLen)
 
-		p.BaseLayer = BaseLayer{Contents: data[:nindex]}
+		p.BaseLayer = BaseLayer{Contents: data[:nindex], Payload: p.Payload}
 
 		return nil
 	}
