@@ -43,6 +43,15 @@ const maxLayerType = 2000
 var ltMeta [maxLayerType]layerTypeMetadata
 var ltMetaMap = map[LayerType]layerTypeMetadata{}
 
+// Returns LayerTypeMetadata
+func GetLayerTypeMetadata(num int) LayerTypeMetadata {
+	if 0 <= num && num < maxLayerType {
+		return ltMeta[num].LayerTypeMetadata
+	} else {
+		return ltMetaMap[LayerType(num)].LayerTypeMetadata
+	}
+}
+
 // RegisterLayerType creates a new layer type and registers it globally.
 // The number passed in must be unique, or a runtime panic will occur.  Numbers
 // 0-999 are reserved for the gopacket library.  Numbers 1000-1999 should be
