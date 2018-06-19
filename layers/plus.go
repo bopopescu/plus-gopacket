@@ -9,6 +9,7 @@ package layers
 import (
 	"encoding/binary"
 	"github.com/google/gopacket"
+	pluspacket "github.com/mami-project/plus-lib/packet"
 )
 
 var _ = RegisterLayerTypeDetector(127, &PLUS{})
@@ -51,6 +52,54 @@ func toBool(v byte) bool {
 	} else {
 		return true
 	}
+}
+
+func (p *PLUS) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+	var buf []byte = nil
+	var err error
+
+	if p.XFlag {
+		_, buf, err = pluspacket.WriteExtendedPacket(
+			nil,
+			p.LFlag,
+			p.RFlag,
+			p.SFlag,
+			p.CAT,
+			p.PSN,
+			p.PSE,
+			uint16(p.PCFType),
+			uint8(p.PCFIntegrity),
+			p.PCFValue,
+			p.Payload,
+		)
+
+		if err != nil {
+			return err
+		}
+	} else {
+		_, buf, _ = pluspacket.WriteBasicPacket(
+			nil,
+			p.LFlag,
+			p.RFlag,
+			p.SFlag,
+			p.CAT,
+			p.PSN,
+			p.PSE,
+			p.Payload,
+		)
+
+		
+	}
+
+	serBuf, err := b.PrependBytes(len(buf))
+
+	if err != nil {
+		return err
+	}
+
+	copy(serBuf, buf)
+
+	return nil
 }
 
 func (plus *PLUS) DecodeFromBytes(data []byte, df gopacket.DecodeFeedback) error {
